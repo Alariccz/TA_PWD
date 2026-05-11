@@ -108,7 +108,7 @@ require_once 'includes/header.php';
 
     <div class="col-md-4">
         <div class="card">
-            <h3 class="card-judul">📋 Tambah Catatan</h3>
+            <h3 class="card-judul">Tambah Catatan</h3>
 
             <?php if ($error): ?>
                 <div class="flash-msg error"><?= htmlspecialchars($error) ?></div>
@@ -160,7 +160,7 @@ require_once 'includes/header.php';
                     </label>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Simpan Catatan →</button>
+                <button type="submit" class="btn btn-primary">Simpan Catatan</button>
             </form>
         </div>
     </div>
@@ -180,7 +180,7 @@ require_once 'includes/header.php';
 
         <?php if (empty($logs)): ?>
             <div class="card text-center p-4">
-                <p class="text-muted small">Belum ada catatan. Mulai tambahkan log pertama! 🌱</p>
+                <p class="text-muted small">Belum ada catatan. Mulai tambahkan log pertama.</p>
             </div>
         <?php else: ?>
             <?php foreach ($logs as $log): ?>
@@ -199,7 +199,7 @@ require_once 'includes/header.php';
                             <input type="hidden" name="action" value="hapus_log">
                             <input type="hidden" name="log_id" value="<?= $log['id'] ?>">
                             <input type="hidden" name="batch_id" value="<?= $log['batch_id'] ?>">
-                            <button type="submit" class="btn-danger" style="font-size: 10px; padding: 3px 8px;" onclick="return confirm('Hapus catatan ini?')">🗑</button>
+                            <button type="submit" class="btn btn-sm btn-danger" style="font-size: 14px; padding: 5px 10px;" onclick="return confirm('Hapus catatan ini?')">🗑</button>
                         </form>
                     </div>
 
@@ -214,10 +214,10 @@ require_once 'includes/header.php';
 
                         <?php
                         $smellLabel = [
-                            'normal'   => '😐 Normal',
-                            'sour'     => '😮 Asam',
-                            'fragrant' => '😊 Wangi',
-                            'rotten'   => '🤢 Busuk'
+                            'normal'   => 'Normal',
+                            'sour'     => 'Asam',
+                            'fragrant' => 'Wangi',
+                            'rotten'   => 'Busuk'
                         ];
                         $smellClass = [
                             'normal'   => 'smell-normal',
@@ -231,10 +231,10 @@ require_once 'includes/header.php';
                         </span>
 
                         <?php if ($log['has_bubbles']): ?>
-                            <span class="log-bubble">🫧 Ada gelembung</span>
+                            <span class="log-bubble">Ada gelembung</span>
                         <?php endif; ?>
                         <?php if ($log['has_mold']): ?>
-                            <span class="log-mold">⚠️ Ada jamur</span>
+                            <span class="log-mold">Ada jamur</span>
                         <?php endif; ?>
                     </div>
                 </div>

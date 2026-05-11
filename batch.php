@@ -186,7 +186,7 @@ require_once 'includes/header.php';
 <?php endif; ?>
 
 <div class="card mb-3">
-    <h3 class="card-judul">➕ Tambah Batch Baru</h3>
+    <h3 class="card-judul"> Tambah Batch Baru</h3>
 
     <?php if ($error): ?>
         <div class="flash-msg error"><?= htmlspecialchars($error) ?></div>

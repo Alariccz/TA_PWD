@@ -83,7 +83,7 @@ require_once 'includes/header.php';
 ?>
 
 <div class="card mb-3">
-    <h3 class="card-judul">🧪 Pilih Batch</h3>
+    <h3 class="card-judul"> Pilih Batch</h3>
     <form method="GET" action="ingredients.php" class="d-flex gap-2 align-items-end">
         <div class="form-group mb-0 flex-grow-1">
             <select name="batch_id" class="form-select-plain">
@@ -104,7 +104,7 @@ require_once 'includes/header.php';
 
         <div class="col-md-4">
             <div class="card">
-                <h3 class="card-judul" style="font-size: 16px;">➕ Tambah Bahan ke <?= htmlspecialchars($selectedBatch['name']) ?></h3>
+                <h3 class="card-judul" style="font-size: 16px;"> Tambah Bahan ke <?= htmlspecialchars($selectedBatch['name']) ?></h3>
 
                 <?php if ($error): ?>
                     <div class="flash-msg error"><?= htmlspecialchars($error) ?></div>
@@ -199,7 +199,7 @@ require_once 'includes/header.php';
                 </div>
 
                 <div class="rasio-info">
-                    💡 <strong>Rasio ideal eco-enzyme:</strong> Limbah organik : Gula : Air = 3 : 1 : 10
+                     <strong>Rasio ideal eco-enzyme:</strong> Limbah organik : Gula : Air = 3 : 1 : 10
                 </div>
             <?php endif; ?>
         </div>

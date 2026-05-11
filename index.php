@@ -125,8 +125,8 @@ require_once 'includes/header.php';
                 </div>
 
                 <div class="batch-aksi-row">
-                    <a href="logs.php?batch_id=<?= $batch['id'] ?>" class="btn-info" style="font-size: 11px; padding: 4px 10px;">📋 Catat Log</a>
-                    <a href="batch.php?detail=<?= $batch['id'] ?>" class="btn-purple">🔍 Detail</a>
+                    <a href="logs.php?batch_id=<?= $batch['id'] ?>" class="btn-info" style="font-size: 11px; padding: 4px 10px;"> Catat Log</a>
+                    <a href="batch.php?detail=<?= $batch['id'] ?>" class="btn-purple">Detail</a>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -135,7 +135,7 @@ require_once 'includes/header.php';
 
 <?php if (!empty($urgentTips)): ?>
     <div class="section-header mt-4">
-        <h2 class="section-title">⚠️ Perhatian Penting</h2>
+        <h2 class="section-title"> Perhatian Penting</h2>
         <a href="trouble.php" class="btn btn-sm">Semua Tips →</a>
     </div>
     <div class="tip-grid">

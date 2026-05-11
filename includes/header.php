@@ -1,9 +1,7 @@
 <?php
 // header.php
 // template header yang dipakai di semua halaman
-// tinggal di-include aja, udah ada navbar dan sidebar
 
-// ambil flash message kalau ada
 $flash = getFlash();
 ?>
 <!DOCTYPE html>
@@ -15,6 +13,9 @@ $flash = getFlash();
 
     <!-- Bootstrap 5 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <!-- Font Awesome untuk ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,13 +37,15 @@ $flash = getFlash();
 <body>
 
 <div id="app">
-
-    <!-- SIDEBAR -->
     <aside class="sidebar">
+
         <div class="sb-logo">
-            <div class="sb-logo-mark">
-                <div class="sb-logo-leaf"></div>
-            </div>
+            <img
+    src="https://i.pinimg.com/1200x/69/fb/77/69fb774f552193cc9a42f86874a246e4.jpg"
+    alt="EcoEnzyme Logo"
+    style="width: 35px; height: 35px; object-fit: contain; border-radius: 6px; mix-blend-mode: multiply;"
+>
+            >
             <span class="sb-logo-text">EcoEnzyme</span>
         </div>
 
@@ -79,14 +82,15 @@ $flash = getFlash();
 
         <div class="sb-spacer"></div>
 
-        <!-- info user + tombol logout -->
+      
         <div class="sb-user">
-            <div class="sb-avatar"><?= htmlspecialchars(currentUserAvatar()) ?></div>
+            <div class="sb-avatar"><?= htmlspecialchars($_SESSION['user_avatar'] ?? '?') ?></div>
             <div>
-                <div class="sb-user-name"><?= htmlspecialchars(currentUserName()) ?></div>
+                <div class="sb-user-name"><?= htmlspecialchars($_SESSION['user_name'] ?? 'Pengguna') ?></div>
                 <a href="logout.php" class="sb-logout">Keluar</a>
             </div>
         </div>
+
     </aside>
 
     <!-- KONTEN UTAMA -->
@@ -96,7 +100,7 @@ $flash = getFlash();
         <div class="topbar">
             <span class="topbar-title"><?= htmlspecialchars($pageTitle ?? 'Dasbor') ?></span>
             <div class="topbar-right">
-                <span class="topbar-salam">Halo, <?= htmlspecialchars(currentUserName()) ?>!</span>
+                <span class="topbar-salam">Halo, <?= htmlspecialchars($_SESSION['user_name'] ?? 'Pengguna') ?>!</span>
                 <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Ganti tema">
                     <span id="themeIcon">☀️</span>
                     <span id="themeLabel">Light</span>
@@ -131,7 +135,6 @@ $flash = getFlash();
                     }
                 }
 
-                // update tampilan tombol sesuai tema yang aktif saat ini
                 document.addEventListener('DOMContentLoaded', function() {
                     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
                     if (isLight) {
