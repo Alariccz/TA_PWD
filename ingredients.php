@@ -181,7 +181,7 @@ require_once 'includes/header.php';
                                             <input type="hidden" name="action" value="hapus_bahan">
                                             <input type="hidden" name="ing_id" value="<?= $ing['id'] ?>">
                                             <input type="hidden" name="batch_id" value="<?= $selectedBatchId ?>">
-                                            <button type="submit" class="btn-danger" style="font-size: 11px; padding: 3px 8px;" onclick="return confirm('Hapus bahan ini?')">🗑</button>
+                                            < <button type="submit" class="btn btn-sm btn-danger" style="font-size: 14px; padding: 5px 10px;" onclick="return confirm('Hapus bahan ini?')"> 🗑</button>
                                         </form>
                                     </td>
                                 </tr>
