@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     name="remember_me"
                     <?= $rememberedEmail ? 'checked' : '' ?>
                 >
-                Ingat saya selama 30 hari
+                Ingat saya selama 30 hari.
             </label>
 
             <?php if ($error): ?>
