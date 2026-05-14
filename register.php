@@ -1,4 +1,7 @@
 <?php
+// register.php
+// halaman daftar akun baru
+// password di-hash dulu sebelum disimpan ke database
 
 session_start();
 require_once 'includes/db.php';
@@ -18,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $confirm  = $_POST['confirm_password'] ?? '';
 
+    // validasi dulu sebelum disimpan
     if (empty($name) || empty($email) || empty($password)) {
         $error = 'Semua kolom wajib diisi.';
     } elseif (strlen($password) < 6) {
@@ -25,19 +29,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($password !== $confirm) {
         $error = 'Konfirmasi password tidak cocok.';
     } else {
+        // hash password - jangan simpan plaintext!
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         $avatar = strtoupper(substr($name, 0, 1));
 
         try {
             $db = getDB();
-            $stmt = $db->prepare("INSERT INTO users (name, email, password, avatar) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$name, $email, $hashedPassword, $avatar]);
+            $stmt = $db->prepare("INSERT INTO users (name, email, password, avatar, role) VALUES (?, ?, ?, ?, ?)");
+            $stmt->execute([$name, $email, $hashedPassword, $avatar, 'user']);
 
             $newUserId = $db->lastInsertId();
 
+            // langsung login setelah daftar
             $_SESSION['user_id']     = $newUserId;
             $_SESSION['user_name']   = $name;
             $_SESSION['user_avatar'] = $avatar;
+            $_SESSION['role']        = 'user';
 
             setFlash('success', 'Akun berhasil dibuat! Selamat datang, ' . $name . ' 🌿');
             header('Location: index.php');

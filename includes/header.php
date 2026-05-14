@@ -1,8 +1,8 @@
 <?php
-// header.php
-// template header yang dipakai di semua halaman
+// header.php - template header + sidebar dengan role-based navigation
 
 $flash = getFlash();
+$role  = currentUserRole(); // 'admin' atau 'user'
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -11,86 +11,100 @@ $flash = getFlash();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($pageTitle ?? 'EcoEnzyme') ?> — EcoEnzyme</title>
 
-    <!-- Bootstrap 5 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-
-    <!-- Font Awesome untuk ikon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Syne:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-    <!-- CSS kita sendiri -->
     <link rel="stylesheet" href="assets/css/style.css">
 
     <!-- apply tema sebelum render supaya tidak flicker -->
     <script>
         (function() {
             const saved = localStorage.getItem('ecoenzy_theme');
-            if (saved === 'light') {
-                document.documentElement.setAttribute('data-theme', 'light');
-            }
+            if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
         })();
     </script>
 </head>
 <body>
 
 <div id="app">
-    <aside class="sidebar">
 
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
         <div class="sb-logo">
-            <img
-    src="https://i.pinimg.com/1200x/69/fb/77/69fb774f552193cc9a42f86874a246e4.jpg"
-    alt="EcoEnzyme Logo"
-    style="width: 35px; height: 35px; object-fit: contain; border-radius: 6px; mix-blend-mode: multiply;"
->
-            >
+            <div class="sb-logo-mark"><div class="sb-logo-leaf"></div></div>
             <span class="sb-logo-text">EcoEnzyme</span>
         </div>
 
+        <?php if ($role === 'admin'): ?>
+        <!-- ======= MENU ADMIN ======= -->
+        <div class="sb-section">Admin</div>
+
+        <a href="admin_dashboard.php" class="sb-item <?= ($activePage ?? '') === 'admin_overview' ? 'active' : '' ?>">
+            <div class="sb-dot amber"></div><span>Dasbor Admin</span>
+        </a>
+        <a href="admin_users.php" class="sb-item <?= ($activePage ?? '') === 'admin_users' ? 'active' : '' ?>">
+            <div class="sb-dot amber"></div><span>Daftar Semua User</span>
+        </a>
+        <a href="admin_report.php" class="sb-item <?= ($activePage ?? '') === 'admin_report' ? 'active' : '' ?>">
+            <div class="sb-dot amber"></div><span>Laporan Global</span>
+        </a>
+
+        <div class="sb-section">Manajemen</div>
+
+        <a href="benefits.php"    class="sb-item <?= ($activePage ?? '') === 'benefits'     ? 'active' : '' ?>">
+            <div class="sb-dot"></div><span>Manfaat Enzim</span>
+        </a>
+        <a href="admin_trouble.php"     class="sb-item <?= ($activePage ?? '') === 'trouble'      ? 'active' : '' ?>">
+            <div class="sb-dot red"></div><span>Pemecahan Masalah</span>
+        </a>
+
+        <?php else: ?>
+        <!-- ======= MENU USER BIASA ======= -->
         <div class="sb-section">Menu</div>
 
         <a href="index.php"       class="sb-item <?= ($activePage ?? '') === 'overview'     ? 'active' : '' ?>">
-            <div class="sb-dot"></div>
-            <span>Ikhtisar</span>
+            <div class="sb-dot"></div><span>Ikhtisar</span>
         </a>
         <a href="batch.php"       class="sb-item <?= ($activePage ?? '') === 'batch'         ? 'active' : '' ?>">
-            <div class="sb-dot blue"></div>
-            <span>Kelola Batch</span>
+            <div class="sb-dot blue"></div><span>Kelola Batch</span>
         </a>
         <a href="ingredients.php" class="sb-item <?= ($activePage ?? '') === 'ingredients'   ? 'active' : '' ?>">
-            <div class="sb-dot blue"></div>
-            <span>Bahan &amp; Resep</span>
+            <div class="sb-dot blue"></div><span>Bahan &amp; Resep</span>
         </a>
         <a href="logs.php"        class="sb-item <?= ($activePage ?? '') === 'logs'           ? 'active' : '' ?>">
-            <div class="sb-dot"></div>
-            <span>Catatan Produksi</span>
+            <div class="sb-dot"></div><span>Catatan Produksi</span>
+        </a>
+        <a href="log_harian.php"  class="sb-item <?= ($activePage ?? '') === 'log_harian'    ? 'active' : '' ?>">
+            <div class="sb-dot"></div><span>Log Harian</span>
+        </a>
+        <a href="kalkulator.php"  class="sb-item <?= ($activePage ?? '') === 'kalkulator'    ? 'active' : '' ?>">
+            <div class="sb-dot blue"></div><span>Kalkulator Takaran</span>
         </a>
         <a href="trouble.php"     class="sb-item <?= ($activePage ?? '') === 'trouble'        ? 'active' : '' ?>">
-            <div class="sb-dot red"></div>
-            <span>Pemecahan Masalah</span>
+            <div class="sb-dot red"></div><span>Pemecahan Masalah</span>
         </a>
-        <a href="benefits.php"    class="sb-item <?= ($activePage ?? '') === 'benefits'       ? 'active' : '' ?>">
-            <div class="sb-dot"></div>
-            <span>Manfaat Enzim</span>
-        </a>
-        <a href="profile.php"     class="sb-item <?= ($activePage ?? '') === 'profile'        ? 'active' : '' ?>">
-            <div class="sb-dot amber"></div>
-            <span>Profil Saya</span>
+
+        <?php endif; ?>
+
+        <!-- Profile - semua role bisa akses -->
+        <div class="sb-section">Akun</div>
+        <a href="profile.php" class="sb-item <?= ($activePage ?? '') === 'profile' ? 'active' : '' ?>">
+            <div class="sb-dot amber"></div><span>Profil Saya</span>
         </a>
 
         <div class="sb-spacer"></div>
 
-      
+        <!-- info user + role badge + tombol logout -->
         <div class="sb-user">
-            <div class="sb-avatar"><?= htmlspecialchars($_SESSION['user_avatar'] ?? '?') ?></div>
-            <div>
-                <div class="sb-user-name"><?= htmlspecialchars($_SESSION['user_name'] ?? 'Pengguna') ?></div>
+            <div class="sb-avatar"><?= htmlspecialchars(currentUserAvatar()) ?></div>
+            <div style="min-width:0">
+                <div class="sb-user-name"><?= htmlspecialchars(currentUserName()) ?></div>
+                <span class="role-badge <?= $role === 'admin' ? 'role-badge--admin' : 'role-badge--user' ?>">
+                    <?= $role === 'admin' ? 'Admin' : 'User' ?>
+                </span>
                 <a href="logout.php" class="sb-logout">Keluar</a>
             </div>
         </div>
-
     </aside>
 
     <!-- KONTEN UTAMA -->
@@ -100,7 +114,12 @@ $flash = getFlash();
         <div class="topbar">
             <span class="topbar-title"><?= htmlspecialchars($pageTitle ?? 'Dasbor') ?></span>
             <div class="topbar-right">
-                <span class="topbar-salam">Halo, <?= htmlspecialchars($_SESSION['user_name'] ?? 'Pengguna') ?>!</span>
+                <span class="topbar-salam">Halo, <?= htmlspecialchars(currentUserName()) ?>!</span>
+                <!-- badge role di topbar -->
+                <span class="role-badge <?= $role === 'admin' ? 'role-badge--admin' : 'role-badge--user' ?>">
+                    <?= $role === 'admin' ? '👑 Admin' : '🌿 User' ?>
+                </span>
+                <!-- toggle light/dark -->
                 <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Ganti tema">
                     <span id="themeIcon">☀️</span>
                     <span id="themeLabel">Light</span>
@@ -110,7 +129,7 @@ $flash = getFlash();
 
         <div class="content">
 
-            <!-- tampilkan flash message kalau ada -->
+            <!-- flash message -->
             <?php if ($flash['message']): ?>
                 <div class="flash-msg <?= htmlspecialchars($flash['type']) ?>">
                     <?= htmlspecialchars($flash['message']) ?>
@@ -119,10 +138,9 @@ $flash = getFlash();
 
             <script>
                 function toggleTheme() {
-                    const html = document.documentElement;
-                    const isLight = html.getAttribute('data-theme') === 'light';
-
-                    if (isLight) {
+                    const html  = document.documentElement;
+                    const light = html.getAttribute('data-theme') === 'light';
+                    if (light) {
                         html.removeAttribute('data-theme');
                         localStorage.setItem('ecoenzy_theme', 'dark');
                         document.getElementById('themeIcon').textContent  = '☀️';
@@ -134,10 +152,8 @@ $flash = getFlash();
                         document.getElementById('themeLabel').textContent = 'Dark';
                     }
                 }
-
                 document.addEventListener('DOMContentLoaded', function() {
-                    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-                    if (isLight) {
+                    if (document.documentElement.getAttribute('data-theme') === 'light') {
                         document.getElementById('themeIcon').textContent  = '🌙';
                         document.getElementById('themeLabel').textContent = 'Dark';
                     }

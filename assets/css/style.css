@@ -41,7 +41,174 @@
 }
 
 /* ============================================================
-   LIGHT THEME
+   ROLE BADGE - label Admin (emas) dan User (hijau)
+   ============================================================ */
+
+.role-badge {
+    display:      inline-block;
+    font-size:    10px;
+    font-weight:  600;
+    padding:      2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+    line-height:  1.6;
+}
+
+.role-badge--admin {
+    background-color: var(--amber-dark);
+    color:            var(--amber-light);
+    border:           1px solid var(--amber);
+}
+
+.role-badge--user {
+    background-color: var(--green-dark);
+    color:            var(--green-light);
+    border:           1px solid var(--green);
+}
+
+[data-theme="light"] .role-badge--admin {
+    background-color: #fef3c7;
+    color:            #92400e;
+    border-color:     #f59e0b;
+}
+
+[data-theme="light"] .role-badge--user {
+    background-color: #d1fae5;
+    color:            #065f46;
+    border-color:     #10b981;
+}
+
+
+/* ============================================================
+   KALKULATOR TAKARAN
+   ============================================================ */
+
+.kalk-hasil {
+    background-color: var(--green-dark);
+    border:           1px solid var(--border2);
+    border-radius:    var(--radius);
+    padding:          16px;
+    margin-top:       14px;
+}
+
+.kalk-rasio-label {
+    font-size:    11px;
+    color:        var(--text-muted);
+    text-align:   center;
+    margin-bottom: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.kalk-row {
+    display:         flex;
+    align-items:     center;
+    justify-content: space-between;
+    gap:             8px;
+    margin-bottom:   14px;
+}
+
+.kalk-item {
+    flex:        1;
+    text-align:  center;
+}
+
+.kalk-icon   { font-size: 24px; margin-bottom: 4px; }
+.kalk-bahan  { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+.kalk-nilai  { font-size: 22px; font-weight: 700; font-family: var(--font-kode); color: var(--green-xl); }
+.kalk-satuan { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+.kalk-separator {
+    font-size: 20px;
+    color:     var(--text-muted);
+    flex-shrink: 0;
+}
+
+.kalk-estimasi {
+    text-align:   center;
+    font-size:    12px;
+    color:        var(--text-dim);
+    padding-top:  10px;
+    border-top:   1px solid var(--border-color);
+    margin-bottom: 8px;
+}
+
+.kalk-rekomendasi {
+    text-align: center;
+    font-size:  12px;
+    color:      var(--text-muted);
+    margin-top: 4px;
+}
+
+
+/* ============================================================
+   SMELL PICKER (log harian)
+   ============================================================ */
+
+.smell-picker {
+    display:   flex;
+    gap:       8px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+}
+
+.smell-option {
+    cursor: pointer;
+}
+
+.smell-option input[type="radio"] {
+    display: none;
+}
+
+.smell-btn {
+    display:        flex;
+    flex-direction: column;
+    align-items:    center;
+    padding:        8px 12px;
+    border-radius:  var(--radius-sm);
+    border:         1px solid var(--border-color);
+    font-size:      11px;
+    cursor:         pointer;
+    transition:     background 0.15s, border-color 0.15s;
+    background-color: var(--bg-card);
+    min-width:      60px;
+}
+
+.smell-option input:checked + .smell-btn {
+    border-color: var(--green);
+    background-color: var(--green-dark);
+}
+
+.smell-emoji { font-size: 20px; margin-bottom: 3px; }
+
+
+/* ============================================================
+   THEME TOGGLE BUTTON
+   ============================================================ */
+
+.theme-toggle-btn {
+    background:    none;
+    border:        1px solid var(--border-color);
+    border-radius: 20px;
+    padding:       4px 12px;
+    cursor:        pointer;
+    font-size:     13px;
+    color:         var(--text-dim);
+    font-family:   var(--font-body);
+    display:       flex;
+    align-items:   center;
+    gap:           5px;
+    transition:    background 0.2s, color 0.2s;
+}
+
+.theme-toggle-btn:hover {
+    background-color: var(--green-dark);
+    color:            var(--green-light);
+}
+
+
+/* ============================================================
+   LIGHT THEME OVERRIDE
    ============================================================ */
 
 [data-theme="light"] {
@@ -50,110 +217,54 @@
     --bg-sidebar:   #e8f3ea;
     --border-color: #c8e0cc;
     --border2:      #b0d4b6;
-
     --green:        #2d7a3a;
     --green-light:  #3a9a4a;
     --green-xl:     #1a5c26;
     --green-dim:    #2d7a3a;
     --green-dark:   #c8e6cc;
-
     --text-main:    #1a2e1d;
     --text-dim:     #2d5c36;
     --text-muted:   #5a8c64;
-
     --amber:        #b07820;
     --amber-light:  #d4950a;
     --amber-dark:   #fef3c7;
-
     --red:          #c0392b;
     --red-dark:     #fee2e2;
-
     --shadow:       0 4px 24px rgba(0, 0, 0, 0.10);
 }
 
-[data-theme="light"] body {
-    background-color: var(--bg-main);
-    color: var(--text-main);
-}
-
+[data-theme="light"] body               { background-color: var(--bg-main); color: var(--text-main); }
 [data-theme="light"] .sb-item:hover,
-[data-theme="light"] a.sb-item:hover {
-    background-color: #d4ecd8;
-    color: var(--green);
-}
-
+[data-theme="light"] a.sb-item:hover    { background-color: #d4ecd8; color: var(--green); }
 [data-theme="light"] .sb-item.active,
-[data-theme="light"] a.sb-item.active {
-    background-color: #bbddc2;
-    color: var(--green-xl);
-}
-
-[data-theme="light"] .batch-prog-bar {
-    background-color: rgba(0, 0, 0, 0.08);
-}
-
-[data-theme="light"] .auth-box {
-    background-color: #ffffff;
-}
-
-[data-theme="light"] .bahan-row input,
-[data-theme="light"] .bahan-row select {
-    background-color: #f8fdf8;
-    color: var(--text-main);
-}
-
-[data-theme="light"] .detail-catatan {
-    background-color: #f0f7f1;
-}
-
-[data-theme="light"] .rasio-info {
-    background-color: #dcf5e4;
-    border-color: #3d8c4a;
-    color: var(--text-dim);
-}
-
+[data-theme="light"] a.sb-item.active   { background-color: #bbddc2; color: var(--green-xl); }
+[data-theme="light"] .batch-prog-bar    { background-color: rgba(0,0,0,0.08); }
+[data-theme="light"] .auth-box          { background-color: #ffffff; }
+[data-theme="light"] .rasio-info        { background-color: #dcf5e4; border-color: #3d8c4a; color: var(--text-dim); }
 [data-theme="light"] .form-group input,
 [data-theme="light"] .form-group textarea,
-[data-theme="light"] .form-select-plain {
+[data-theme="light"] .form-select-plain { background-color: #f8fdf8; color: var(--text-main); border-color: var(--border-color); }
+[data-theme="light"] .form-group input:focus,
+[data-theme="light"] .form-group textarea:focus,
+[data-theme="light"] .form-select-plain:focus { border-color: var(--green); }
+[data-theme="light"] .data-table th     { background-color: #e4f0e6; color: var(--text-muted); }
+[data-theme="light"] .data-table tr:hover { background-color: #f0f7f2; }
+[data-theme="light"] .kalk-hasil        { background-color: #e0f5e6; border-color: #b0d4b6; }
+[data-theme="light"] .bahan-row input,
+[data-theme="light"] .bahan-row select {
     background-color: #f8fdf8;
     color: var(--text-main);
     border-color: var(--border-color);
 }
 
-[data-theme="light"] .form-group input:focus,
-[data-theme="light"] .form-group textarea:focus,
-[data-theme="light"] .form-select-plain:focus {
+[data-theme="light"] .bahan-row input:focus,
+[data-theme="light"] .bahan-row select:focus {
     border-color: var(--green);
 }
-
-[data-theme="light"] .data-table th {
-    background-color: #e4f0e6;
-    color: var(--text-muted);
-}
-
-[data-theme="light"] .data-table tr:hover {
-    background-color: #f0f7f2;
-}
-
-/* tombol toggle tema */
-.theme-toggle-btn {
-    background: none;
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    padding: 4px 12px;
-    cursor: pointer;
-    font-size: 13px;
+[data-theme="light"] .detail-catatan {
+    background-color: #f8fdf8;
     color: var(--text-dim);
-    font-family: var(--font-body);
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: background 0.2s, color 0.2s;
-}
-
-.theme-toggle-btn:hover {
-    background-color: var(--green-dark);
-    color: var(--green-light);
+    border: 1px solid var(--border-color);
 }
 
 /* reset dasar */
@@ -1379,212 +1490,4 @@ table.data-table tr:hover td {
     .metric-grid {
         grid-template-columns: 1fr 1fr;
     }
-}
-/* ============================================================
-   CSS CHATBOT - TAMBAHAN UNTUK HALAMAN TROUBLE.PHP
-   ============================================================ */
-
-/* Container Chatbot */
-.chatbot-section {
-    margin-bottom: 24px;
-}
-
-/* Container Chat Utama */
-.chat-container {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    height: 480px;
-}
-
-/* Area Pesan Chat */
-.chat-messages {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px;
-    background: var(--bg-main);
-}
-
-/* Setiap Baris Pesan */
-.chat-message {
-    display: flex;
-    margin-bottom: 12px;
-}
-
-.chat-message.user {
-    justify-content: flex-end;
-}
-
-.chat-message.ai {
-    justify-content: flex-start;
-}
-
-/* Bubble Chat */
-.chat-bubble {
-    max-width: 85%;
-    padding: 10px 14px;
-    border-radius: 16px;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-/* Bubble User */
-.chat-message.user .chat-bubble {
-    background: var(--green);
-    color: white;
-    border-bottom-right-radius: 4px;
-}
-
-/* Bubble AI */
-.chat-message.ai .chat-bubble {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    color: var(--text-main);
-    border-bottom-left-radius: 4px;
-}
-
-/* Warna border berdasarkan severity */
-.chat-bubble.severity-red {
-    border-left: 3px solid #ef4444;
-}
-
-.chat-bubble.severity-amber {
-    border-left: 3px solid #f59e0b;
-}
-
-.chat-bubble.severity-green {
-    border-left: 3px solid #10b981;
-}
-
-.chat-bubble.severity-info {
-    border-left: 3px solid #3b82f6;
-}
-
-/* Waktu Chat */
-.chat-time {
-    font-size: 9px;
-    opacity: 0.6;
-    margin-top: 4px;
-    display: block;
-}
-
-/* Area Input Chat */
-.chat-input-area {
-    padding: 12px;
-    background: var(--bg-card);
-    border-top: 1px solid var(--border-color);
-}
-
-/* Group Input + Tombol */
-.chat-input-group {
-    display: flex;
-    gap: 10px;
-}
-
-/* Input Text Chat */
-.chat-input-group input {
-    flex: 1;
-    padding: 10px 14px;
-    border: 1px solid var(--border-color);
-    border-radius: 40px;
-    font-size: 13px;
-    outline: none;
-    background: var(--bg-main);
-    color: var(--text-main);
-}
-
-.chat-input-group input:focus {
-    border-color: var(--green);
-}
-
-/* Tombol Kirim Chat */
-.chat-input-group button {
-    background: var(--green);
-    border: none;
-    border-radius: 40px;
-    padding: 0 20px;
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.chat-input-group button:hover {
-    background: var(--green-light);
-}
-
-/* Welcome Screen */
-.chat-welcome {
-    text-align: center;
-    padding: 20px;
-    color: var(--text-muted);
-}
-
-.chat-welcome h4 {
-    margin: 10px 0 5px;
-    font-size: 16px;
-}
-
-/* Suggestion Buttons */
-.suggestions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 10px;
-}
-
-.suggestion-btn {
-    background: var(--green-dark);
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    padding: 5px 12px;
-    font-size: 11px;
-    cursor: pointer;
-    color: var(--text-dim);
-    transition: all 0.2s;
-}
-
-.suggestion-btn:hover {
-    background: var(--green);
-    color: white;
-    transform: translateY(-1px);
-}
-
-/* Tombol Clear Chat */
-.clear-chat-btn {
-    background: none;
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    padding: 5px 12px;
-    font-size: 11px;
-    cursor: pointer;
-    color: var(--text-muted);
-    transition: all 0.2s;
-}
-
-.clear-chat-btn:hover {
-    background: #ef4444;
-    border-color: #ef4444;
-    color: white;
-}
-
-/* Header Chatbot */
-.chat-header-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-}
-
-/* Error Message */
-.flash-msg.error {
-    background: rgba(239, 68, 68, 0.1);
-    border-left: 3px solid #ef4444;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 16px;
-    font-size: 12px;
 }

@@ -1,4 +1,10 @@
 <?php
+// batch.php - halaman kelola batch (CRUD lengkap)
+// CREATE: tambah batch baru
+// READ: tampilkan daftar batch
+// UPDATE: ubah status batch
+// DELETE: hapus batch
+
 session_start();
 require_once 'includes/db.php';
 require_once 'includes/auth.php';
@@ -11,9 +17,14 @@ $db         = getDB();
 $userId     = currentUserId();
 $error      = '';
 
+// ============================================================
+// PROSES FORM (POST)
+// ============================================================
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
+    // tambah batch baru
     if ($action === 'tambah_batch') {
         $name   = trim($_POST['name'] ?? '');
         $flavor = trim($_POST['flavor_label'] ?? '');
@@ -26,12 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = 'Semua kolom wajib diisi, volume harus lebih dari 0.';
         } else {
             $stmt = $db->prepare("
-                INSERT INTO batches (user_id, name, flavor_label, start_date, target_date, volume_liters, notes)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO batches (user_id, name, flavor_label, start_date, tanggal_buat, target_date, volume_liters, notes)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ");
-            $stmt->execute([$userId, $name, $flavor, $start, $target, $volume, $notes]);
+            $stmt->execute([$userId, $name, $flavor, $start, $start, $target, $volume, $notes]);
             $batchId = $db->lastInsertId();
 
+            // simpan bahan-bahan kalau ada
             $bahanNama  = $_POST['bahan_nama']  ?? [];
             $bahanTipe  = $_POST['bahan_tipe']  ?? [];
             $bahanBerat = $_POST['bahan_berat'] ?? [];
@@ -58,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // tandai selesai
     if ($action === 'selesaikan_batch') {
         $id = (int)($_POST['batch_id'] ?? 0);
         $stmt = $db->prepare("UPDATE batches SET status = 'completed' WHERE id = ? AND user_id = ?");
@@ -67,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // tandai gagal
     if ($action === 'gagalkan_batch') {
         $id = (int)($_POST['batch_id'] ?? 0);
         $stmt = $db->prepare("UPDATE batches SET status = 'failed' WHERE id = ? AND user_id = ?");
@@ -76,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // hapus batch
     if ($action === 'hapus_batch') {
         $id = (int)($_POST['batch_id'] ?? 0);
         $stmt = $db->prepare("DELETE FROM batches WHERE id = ? AND user_id = ?");
@@ -86,6 +101,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// ============================================================
+// AMBIL DATA
+// ============================================================
+
 $filterStatus = $_GET['status'] ?? 'active';
 if (!in_array($filterStatus, ['active', 'completed', 'failed'])) {
     $filterStatus = 'active';
@@ -95,7 +114,8 @@ $stmtList = $db->prepare("
     SELECT *,
         DATEDIFF(target_date, CURDATE())  AS days_left,
         DATEDIFF(CURDATE(), start_date)   AS days_elapsed,
-        DATEDIFF(target_date, start_date) AS total_days
+        DATEDIFF(target_date, start_date) AS total_days,
+        DATEDIFF(DATE_ADD(COALESCE(tanggal_buat, start_date), INTERVAL 90 DAY), CURDATE()) AS hari_panen
     FROM batches
     WHERE user_id = ? AND status = ?
     ORDER BY start_date DESC
@@ -103,6 +123,7 @@ $stmtList = $db->prepare("
 $stmtList->execute([$userId, $filterStatus]);
 $batches = $stmtList->fetchAll();
 
+// cek kalau ada ?detail=ID
 $detailBatch       = null;
 $detailIngredients = [];
 if (isset($_GET['detail'])) {
@@ -121,6 +142,7 @@ if (isset($_GET['detail'])) {
 require_once 'includes/header.php';
 ?>
 
+<!-- detail batch (kalau ada) -->
 <?php if ($detailBatch): ?>
     <div class="card mb-3">
         <div class="d-flex justify-content-between align-items-start">
@@ -185,8 +207,9 @@ require_once 'includes/header.php';
     </div>
 <?php endif; ?>
 
+<!-- form tambah batch baru -->
 <div class="card mb-3">
-    <h3 class="card-judul"> Tambah Batch Baru</h3>
+    <h3 class="card-judul">➕ Tambah Batch Baru</h3>
 
     <?php if ($error): ?>
         <div class="flash-msg error"><?= htmlspecialchars($error) ?></div>
@@ -234,8 +257,10 @@ require_once 'includes/header.php';
             </div>
         </div>
 
+        <!-- input bahan - bisa ditambah dinamis pakai JS -->
         <h4 class="mt-3 mb-2" style="font-size: 14px;">Komposisi Bahan (opsional)</h4>
         <div id="bahan-list">
+            <!-- baris bahan pertama -->
             <div class="bahan-row">
                 <div>
                     <label class="bahan-row-label">Nama Bahan</label>
@@ -260,12 +285,14 @@ require_once 'includes/header.php';
             </div>
         </div>
 
+        <!-- tombol tambah baris bahan -->
         <button type="button" class="btn-tambah-bahan" onclick="tambahBahan()">+ Tambah Bahan</button>
 
         <button type="submit" class="btn btn-primary">Simpan Batch →</button>
     </form>
 </div>
 
+<!-- daftar batch -->
 <div class="section-header">
     <h3 class="section-title">Daftar Batch</h3>
     <div class="d-flex gap-2">
