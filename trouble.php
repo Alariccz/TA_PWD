@@ -385,10 +385,10 @@ require_once 'includes/header.php';
                     <h4>Halo! Ada yang bisa saya bantu?</h4>
                     <p>Saya asisten AI eco-enzyme. Bisa jawab pertanyaan <strong>panjang lebar & bahasa gaul</strong> juga!<br>Coba tanyakan:</p>
                     <div class="suggestions">
-                        <button class="suggestion-btn" onclick="setQuestion('Batch gue baunya kayak bangkai, gimana dong?')">😷 Bau bangkai</button>
-                        <button class="suggestion-btn" onclick="setQuestion('Di toples gue ada bulu putih, bahaya ga?')">🍄 Jamur putih</button>
+                        <button class="suggestion-btn" onclick="setQuestion('Batch saya baunya kayak bangkai, gimana dong?')">😷 Bau bangkai</button>
+                        <button class="suggestion-btn" onclick="setQuestion('Di toples saya ada bulu putih, bahaya ga?')">🍄 Jamur putih</button>
                         <button class="suggestion-btn" onclick="setQuestion('Cara buat batch baru gimana?')">📦 Tambah batch</button>
-                        <button class="suggestion-btn" onclick="setQuestion('Gue lupa password, bisa minta tolong?')">🔐 Lupa password</button>
+                        <button class="suggestion-btn" onclick="setQuestion('Saya lupa password, bisa minta tolong?')">🔐 Lupa password</button>
                         <button class="suggestion-btn" onclick="setQuestion('Eco-enzyme buat apa aja?')">🌿 Manfaat</button>
                     </div>
                 </div>
@@ -409,7 +409,7 @@ require_once 'includes/header.php';
                 <input type="hidden" name="action" value="chat">
                 <div class="chat-input-group">
                     <input type="text" name="message" id="messageInput"
-                        placeholder="Tanyakan apapun... (bisa pake bahasa gaul)"
+                        placeholder="Tanyakan apapun...contoh: 'Batch saya nggak ada gelembung, kenapa ya?'"
                         autocomplete="off" required>
                     <button type="submit">Kirim →</button>
                 </div>
