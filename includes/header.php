@@ -31,11 +31,8 @@ $role  = currentUserRole();
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
-        <div class="sb-logo">
-            <div class="sb-logo-mark">
-                <!-- Logo dengan background transparan - Gunakan logo lokal -->
-                <img src="https://i.pinimg.com/1200x/a5/74/c4/a574c49aa8cee3a629792e70dd2befab.jpg" alt="Logo" class="sb-logo-img">
-            </div>
+            <div class="sb-logo">
+            <div class="sb-logo-mark"><div class="sb-logo-leaf"></div></div>
             <span class="sb-logo-text">EcoEnzyme</span>
         </div>
 

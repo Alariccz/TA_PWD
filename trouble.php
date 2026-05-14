@@ -17,184 +17,83 @@ $activePage = 'trouble';
 $db         = getDB();
 
 // ============================================================
-// KNOWLEDGE BASE CHATBOT
+// FUNGSI CHATBOT PINTAR (Powered by Gemini API)
 // ============================================================
 
-$knowledgeBase = [
-    'bau busuk|bau bangkai|baunya aneh|baunya menyengat|stnk|basi|anyir|bau tidak enak' => [
-        'answer' => '🔴 **Waduh, bau busuk?** Tenang, saya bantu! Bau busuk biasanya terjadi karena:
-1. Kelebihan air (terlalu encer)
-2. Wadah tidak steril
-3. Kontaminasi bakteri pembusuk
+function getGeminiResponse($userMessage) {
+    // API Key kamu (Pastikan tidak ada spasi di awal/akhir)
+    $apiKey = trim('AIzaSyAwhcEQ3Llp80veuaBZ0nYOJNyRv25ldSE'); 
+    
+    // URL sudah BERSIH, tidak pakai ?key= lagi. Pakai v1 yang paling stabil.
+    $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+    $systemInstruction = "Kamu adalah asisten pakar Eco-Enzyme yang ramah, asyik, dan suka pakai emoji. 
+    Aturan menjawab:
+    1. Jawab ringkas, padat, maksimal 2-3 paragraf.
+    2. Rasio standar: 3 (bahan organik) : 1 (gula) : 10 (air). Fermentasi 3 bulan.
+    3. Bau bangkai/jamur hitam = gagal/buang.
+    4. Bau asam/wangi/jamur putih/gelembung = sehat/normal.
+    5. Jawab dalam bahasa Indonesia kasual.";
 
-📌 **Solusi yang bisa kamu coba:**
-• Tambah gula merah 100 gram per 10 liter
-• Aduk rata dan tutup RAPAT
-• Jangan dibuka-buka selama 3-5 hari
+    $payload = [
+        "contents" => [
+            [
+                "parts" => [
+                    ["text" => $systemInstruction . "\n\nPertanyaan User: " . $userMessage]
+                ]
+            ]
+        ]
+    ];
 
-⚠️ Kalau baunya sudah kayak bangkai dan warna jadi hitam, terpaksa harus dibuang dan mulai batch baru ya.',
-        'severity' => 'red'
-    ],
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    
+    // PINDAHKAN API KEY KE HTTP HEADERS DI SINI
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'x-goog-api-key: ' . $apiKey
+    ]);
+    
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+    
+    // Bypass SSL khusus untuk local server (Laragon/XAMPP)
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 
-    'bau asam|asam banget|baunya masam|tajam|perih di hidung' => [
-        'answer' => '🟡 **Bau asam** itu sebenarnya WAJAR selama fermentasi. Tapi kalau terlalu kuat:
-• Tambah air bersih sedikit (jangan lebih dari 5% volume)
-• Atau tambah 50 gram gula per 10 liter
-• Pastikan wadah tertutup rapat',
-        'severity' => 'amber'
-    ],
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($ch);
+    curl_close($ch);
 
-    'bau wangi|harum|fermentasi sehat|baunya enak|kayak tape|kayak buah' => [
-        'answer' => '✅ **YES! Bau wangi = FERMENTASI SUKSES!** Pertahankan dengan:
-• Jangan sering buka tutup
-• Pastikan wadah kedap udara
-• Teruskan sampai 3 bulan minimal',
-        'severity' => 'green'
-    ],
+    // Mode Debug
+    if ($curlError) {
+        return ['answer' => '🚨 **Error Koneksi (cURL):** ' . $curlError, 'severity' => 'red'];
+    }
 
-    'jamur|ada jamur|tumbuh jamur|kapur|bulu putih|bercak putih|jamur hitam|jamur hijau' => [
-        'answer' => '🔴 **Jamur?** Langkah penyelamatan:
-1. Buang lapisan jamur pakai sendok bersih
-2. Tambah gula 50 gram per liter
-3. Tutup RAPAT dan jangan buka selama seminggu
-⚠️ Kalau jamur HITAM/HIJAU, batch HARUS DIBUANG!',
-        'severity' => 'red'
-    ],
+    if ($httpCode != 200) {
+        return ['answer' => '🚨 **Error API Google (Kode ' . $httpCode . '):** ' . $response, 'severity' => 'red'];
+    }
 
-    'ph rendah|ph 3|asam banget|ph terlalu rendah|kecut banget' => [
-        'answer' => '🟡 **pH di bawah 3.5?** Solusi:
-• Tambah air kapur (1 sendok teh per 10 liter)
-• Atau encerkan dengan air bersih 5-10%',
-        'severity' => 'amber'
-    ],
-
-    'ph tinggi|ph 7|nggak asam|tawar|fermentasi lambat' => [
-        'answer' => '🟡 **pH di atas 4.5?** Solusi:
-• Tambah gula 50 gram per liter
-• Pastikan wadah KEDAP UDARA
-• Suhu ideal 25-35°C',
-        'severity' => 'amber'
-    ],
-
-    'gelembung|berbuih|busa|ada gelembung|fermentasi aktif' => [
-        'answer' => '✅ **Gelembung = FERMENTASI HIDUP!** Pertahankan dengan jangan sering buka tutup dan suhu stabil 25-35°C.',
-        'severity' => 'green'
-    ],
-
-    'nggak ada gelembung|diam aja|fermentasi mati|berhenti|sepiii' => [
-        'answer' => '🟡 **Tidak ada gelembung?** Coba:
-1. Tambah gula 100 gram per 10 liter
-2. Aduk perlahan
-3. Pastikan suhu 25-35°C
-4. Tunggu 2-3 hari',
-        'severity' => 'amber'
-    ],
-
-    'rasio|perbandingan|takaran|3 1 10|resep' => [
-        'answer' => '📐 **Rasio ideal: 3 : 1 : 10**
-• 3 bagian LIMBAH ORGANIK
-• 1 bagian GULA
-• 10 bagian AIR
-Contoh: 300g limbah + 100g gula + 1L air',
-        'severity' => 'green'
-    ],
-
-    'lama fermentasi|berapa hari|minimal|3 bulan|kapan selesai|kapan panen' => [
-        'answer' => '⏱️ **Lama fermentasi:**
-• 3 bulan → sudah bisa dipakai
-• 6 bulan → lebih bagus
-• 12 bulan → super konsentrat
-Jangan sering buka tutup!',
-        'severity' => 'green'
-    ],
-
-    'suhu|panas|dingin|temperatur|ideal berapa' => [
-        'answer' => '🌡️ **Suhu ideal: 25-35°C**
-• <20°C → fermentasi lambat
-• >40°C → mikroba mati
-Letakkan di tempat teduh tapi hangat.',
-        'severity' => 'green'
-    ],
-
-    'cara pakai|penggunaan|aplikasi|digunakan buat apa' => [
-        'answer' => '🧴 **Cara pakai eco-enzyme:**
-• Pembersih lantai: 50ml/L air
-• Pupuk tanaman: 10ml/L air
-• Pengusir serangga: 20ml/L air
-• Saluran mampet: 100ml murni',
-        'severity' => 'green'
-    ],
-
-    'manfaat|kegunaan|untuk apa|keuntungan' => [
-        'answer' => '🌿 **Manfaat eco-enzyme:**
-✅ Pembersih alami
-✅ Pupuk organik
-✅ Mengurai limbah
-✅ Mengusir serangga
-✅ Menetralisir bau',
-        'severity' => 'green'
-    ],
-
-    'tambah batch|cara buat batch|batch baru|bikin batch' => [
-        'answer' => '📦 **Cara tambah batch:**
-1. Klik menu "Kelola Batch"
-2. Isi nama batch, rasa, tanggal, volume
-3. Klik "Simpan Batch"',
-        'severity' => 'green'
-    ],
-
-    'ganti password|ubah password|lupa password' => [
-        'answer' => '🔐 **Cara ganti password:**
-1. Klik menu "Profil Saya"
-2. Scroll ke "Ganti Password"
-3. Masukkan password lama dan baru
-4. Klik "Ganti Password"',
-        'severity' => 'amber'
-    ],
-
-    'halo|hai|hey|permisi|pagi|siang|malam' => [
-        'answer' => '🌿 **Halo!** Ada yang bisa saya bantu? Tanyakan tentang fermentasi, cara pakai eco-enzyme, atau fitur website ya!',
-        'severity' => 'green'
-    ],
-
-    'makasih|terima kasih|thanks|thank you' => [
-        'answer' => '😊 **Sama-sama!** Senang bisa membantu. Semangat terus bikin eco-enzyme-nya! 🌿💪',
-        'severity' => 'green'
-    ],
-];
-
-function getBestMatch($userMessage, $knowledgeBase) {
-    $userMessage = strtolower($userMessage);
-    $bestMatch   = null;
-    $bestScore   = 0;
-
-    foreach ($knowledgeBase as $keywords => $data) {
-        $keywordList = explode('|', $keywords);
-        $maxScore    = 0;
-
-        foreach ($keywordList as $keyword) {
-            $keyword = trim($keyword);
-            if (strpos($userMessage, $keyword) !== false) {
-                $score = strlen($keyword);
-                if ($score > $maxScore) $maxScore = $score;
+    // Olah jawaban jika sukses
+    if ($httpCode == 200 && $response) {
+        $data = json_decode($response, true);
+        if (isset($data['candidates'][0]['content']['parts'][0]['text'])) {
+            $aiText = $data['candidates'][0]['content']['parts'][0]['text'];
+            
+            $severity = 'info'; 
+            if (stripos($aiText, 'buang') !== false || stripos($aiText, 'bahaya') !== false || stripos($aiText, 'gagal') !== false) {
+                $severity = 'red';
+            } elseif (stripos($aiText, 'normal') !== false || stripos($aiText, 'sehat') !== false || stripos($aiText, 'berhasil') !== false || stripos($aiText, 'wajar') !== false) {
+                $severity = 'green';
+            } elseif (stripos($aiText, 'tambah') !== false || stripos($aiText, 'tunggu') !== false) {
+                $severity = 'amber';
             }
-            similar_text($keyword, $userMessage, $similarity);
-            if ($similarity > 60 && $similarity > $maxScore) $maxScore = $similarity;
-        }
 
-        if ($maxScore > $bestScore) {
-            $bestScore = $maxScore;
-            $bestMatch = $data;
+            return ['answer' => $aiText, 'severity' => $severity];
         }
     }
-
-    if ($bestScore < 10) {
-        return [
-            'answer'   => '🤖 **Maaf, saya kurang paham.** Coba tanyakan: bau (busuk/asam/wangi), jamur, pH, gelembung, rasio 3:1:10, lama fermentasi, suhu ideal, cara pakai, atau manfaat eco-enzyme.',
-            'severity' => 'info'
-        ];
-    }
-    return $bestMatch;
+    
+    return ['answer' => 'Aduh, otak AI-nya lagi nge-lag nih. Coba tanya lagi sebentar ya! 😅', 'severity' => 'amber'];
 }
 
 // ============================================================
@@ -206,7 +105,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'chat') {
         $userMessage = trim($_POST['message'] ?? '');
         if (!empty($userMessage)) {
-            $aiData = getBestMatch($userMessage, $knowledgeBase);
+            
+            // 👇 INI YANG BERUBAH: Memanggil fungsi Gemini 👇
+            $aiData = getGeminiResponse($userMessage);
 
             if (!isset($_SESSION['chat_history'])) $_SESSION['chat_history'] = [];
 
@@ -367,7 +268,6 @@ require_once 'includes/header.php';
 }
 </style>
 
-<!-- CHATBOT (hanya untuk user) -->
 <div class="chatbot-section">
     <div class="chat-header-actions">
         <h3 style="font-family: var(--font-judul); font-size: 18px; margin: 0;">🤖 Tanya AI EcoEnzyme</h3>
@@ -424,7 +324,6 @@ require_once 'includes/header.php';
     </div>
 </div>
 
-<!-- DAFTAR TIP (read-only) -->
 <div class="section-header mb-2">
     <h3 class="section-title">📋 Tips &amp; Panduan</h3>
 </div>
