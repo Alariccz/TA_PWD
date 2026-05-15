@@ -51,9 +51,6 @@ $role  = currentUserRole();
             </a>
 
             <div class="sb-section">Manajemen</div>
-            <a href="benefits.php" class="sb-item <?= ($activePage ?? '') === 'benefits' ? 'active' : '' ?>">
-                <div class="sb-dot"></div><span>Manfaat Enzim</span>
-            </a>
             <a href="admin_trouble.php" class="sb-item <?= ($activePage ?? '') === 'trouble' ? 'active' : '' ?>">
                 <div class="sb-dot red"></div><span>Pemecahan Masalah</span>
             </a>
@@ -70,9 +67,7 @@ $role  = currentUserRole();
             <a href="ingredients.php" class="sb-item <?= ($activePage ?? '') === 'ingredients' ? 'active' : '' ?>">
                 <div class="sb-dot blue"></div><span>Bahan &amp; Resep</span>
             </a>
-            <a href="logs.php" class="sb-item <?= ($activePage ?? '') === 'logs' ? 'active' : '' ?>">
-                <div class="sb-dot"></div><span>Catatan Produksi</span>
-            </a>
+
             <a href="log_harian.php" class="sb-item <?= ($activePage ?? '') === 'log_harian' ? 'active' : '' ?>">
                 <div class="sb-dot"></div><span>Log Harian</span>
             </a>

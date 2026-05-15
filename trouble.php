@@ -22,7 +22,7 @@ $db         = getDB();
 
 function getGeminiResponse($userMessage) {
     // API Key kamu (Pastikan tidak ada spasi di awal/akhir)
-    $apiKey = trim('AIzaSyAwhcEQ3Llp80veuaBZ0nYOJNyRv25ldSE'); 
+    $apiKey = trim('AIzaSyBO-8nolwTXPNg-ejv7WEVUNUsu8N-H6Ec'); 
     
     // URL sudah BERSIH, tidak pakai ?key= lagi. Pakai v1 yang paling stabil.
     $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
