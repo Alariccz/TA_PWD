@@ -284,13 +284,13 @@ require_once 'includes/header.php';
                     <div style="font-size: 40px;">🌿🧪</div>
                     <h4>Halo! Ada yang bisa saya bantu?</h4>
                     <p>Saya asisten AI eco-enzyme. Bisa jawab pertanyaan <strong>panjang lebar & bahasa gaul</strong> juga!<br>Coba tanyakan:</p>
-                    <div class="suggestions">
+                    <!-- <div class="suggestions">
                         <button class="suggestion-btn" onclick="setQuestion('Batch saya baunya kayak bangkai, gimana dong?')">😷 Bau bangkai</button>
                         <button class="suggestion-btn" onclick="setQuestion('Di toples saya ada bulu putih, bahaya ga?')">🍄 Jamur putih</button>
                         <button class="suggestion-btn" onclick="setQuestion('Cara buat batch baru gimana?')">📦 Tambah batch</button>
                         <button class="suggestion-btn" onclick="setQuestion('Saya lupa password, bisa minta tolong?')">🔐 Lupa password</button>
                         <button class="suggestion-btn" onclick="setQuestion('Eco-enzyme buat apa aja?')">🌿 Manfaat</button>
-                    </div>
+                    </div> -->
                 </div>
             <?php else: ?>
                 <?php foreach ($_SESSION['chat_history'] as $chat): ?>
