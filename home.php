@@ -10,9 +10,8 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
         }
-        /* Navbar Styling */
         .navbar {
-            background-color: #2d6a4f; /* Hijau Tua */
+            background-color: #2d6a4f; 
         }
         .navbar-brand, .nav-link {
             color: #ffffff !important;
@@ -33,7 +32,6 @@
         .content-section {
             padding: 80px 0;
         }
-        /* Footer Styling */
         footer {
             background-color: #1b4332;
             color: #d8f3dc;

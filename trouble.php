@@ -1,12 +1,10 @@
 <?php
-
 session_start();
 require_once 'includes/db.php';
 require_once 'includes/auth.php';
 
 requireLogin();
 
-// halaman ini khusus USER — admin diarahkan ke admin_trouble.php
 if (isAdmin()) {
     header('Location: admin_trouble.php');
     exit;
@@ -15,10 +13,6 @@ if (isAdmin()) {
 $pageTitle  = 'Pemecahan Masalah';
 $activePage = 'trouble';
 $db         = getDB();
-
-// ============================================================
-// KNOWLEDGE BASE CHATBOT
-// ============================================================
 
 $knowledgeBase = [
     'bau busuk|bau bangkai|baunya aneh|baunya menyengat|stnk|basi|anyir|bau tidak enak' => [
@@ -197,9 +191,6 @@ function getBestMatch($userMessage, $knowledgeBase) {
     return $bestMatch;
 }
 
-// ============================================================
-// PROSES POST
-// ============================================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
@@ -228,7 +219,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// ambil semua tip (read-only untuk user)
 $filterSeverity = $_GET['severity'] ?? 'all';
 $validSeverity  = ['all', 'red', 'amber', 'green'];
 if (!in_array($filterSeverity, $validSeverity)) $filterSeverity = 'all';
@@ -367,7 +357,6 @@ require_once 'includes/header.php';
 }
 </style>
 
-<!-- CHATBOT (hanya untuk user) -->
 <div class="chatbot-section">
     <div class="chat-header-actions">
         <h3 style="font-family: var(--font-judul); font-size: 18px; margin: 0;">🤖 Tanya AI EcoEnzyme</h3>
@@ -424,7 +413,6 @@ require_once 'includes/header.php';
     </div>
 </div>
 
-<!-- DAFTAR TIP (read-only) -->
 <div class="section-header mb-2">
     <h3 class="section-title">📋 Tips &amp; Panduan</h3>
 </div>
