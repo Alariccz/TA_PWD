@@ -1,4 +1,7 @@
 <?php
+// kalkulator.php - kalkulator takaran eco-enzyme
+// Rumus: Gula = Berat Buah / 3, Air = Gula * 10
+
 session_start();
 require_once 'includes/db.php';
 require_once 'includes/auth.php';
@@ -10,6 +13,7 @@ $activePage = 'kalkulator';
 $db         = getDB();
 $userId     = currentUserId();
 
+// simpan ke history kalau ada POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['berat_buah'])) {
     $beratBuah = (float)$_POST['berat_buah'];
     if ($beratBuah > 0) {
@@ -23,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['berat_buah'])) {
     }
 }
 
+// ambil riwayat 10 kalkulasi terakhir
 $riwayat = $db->prepare("SELECT * FROM kalkulator_history WHERE user_id = ? ORDER BY created_at DESC LIMIT 10");
 $riwayat->execute([$userId]);
 $histori = $riwayat->fetchAll();
@@ -32,6 +37,7 @@ require_once 'includes/header.php';
 
 <div class="row g-3">
 
+    <!-- form kalkulator -->
     <div class="col-md-5">
         <div class="card">
             <h3 class="card-judul">🧮 Kalkulator Takaran</h3>
@@ -53,6 +59,8 @@ require_once 'includes/header.php';
                     autofocus
                 >
             </div>
+
+            <!-- hasil kalkulasi real-time -->
             <div class="kalk-hasil" id="hasilBox" style="display:none">
                 <div class="kalk-rasio-label">Rasio ideal  3 : 1 : 10</div>
 
@@ -79,19 +87,23 @@ require_once 'includes/header.php';
                     </div>
                 </div>
 
+                <!-- estimasi volume jadi -->
                 <div class="kalk-estimasi">
                     📦 Estimasi hasil: <strong id="estimasiVolume">—</strong> liter eco-enzyme
                 </div>
 
+                <!-- rekomendasi wadah -->
                 <div class="kalk-rekomendasi" id="rekomendasiWadah"></div>
             </div>
 
+            <!-- form simpan ke history -->
             <form method="POST" action="kalkulator.php" id="formSimpan" style="display:none;margin-top:12px">
                 <input type="hidden" name="berat_buah" id="hiddenBerat">
                 <button type="submit" class="btn btn-primary">💾 Simpan ke Riwayat →</button>
             </form>
         </div>
 
+        <!-- tips rasio -->
         <div class="card mt-3">
             <h4 style="font-size: 14px; margin-bottom: 10px;">💡 Tips Rasio</h4>
             <ul style="font-size: 12px; color: var(--text-muted); padding-left: 18px; line-height: 2;">
@@ -104,6 +116,7 @@ require_once 'includes/header.php';
         </div>
     </div>
 
+    <!-- riwayat kalkulasi -->
     <div class="col-md-7">
         <h2 class="section-title mb-2">📋 Riwayat Kalkulasi</h2>
 
@@ -165,6 +178,7 @@ function hitungOtomatis() {
     document.getElementById('estimasiVolume').textContent = total.toFixed(2);
     document.getElementById('hiddenBerat').value          = berat;
 
+    // rekomendasi wadah
     const rekEl = document.getElementById('rekomendasiWadah');
     let rek = '';
     if (total <= 2)       rek = '🪣 Gunakan toples kaca 2L atau ember kecil.';

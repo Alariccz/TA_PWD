@@ -1,10 +1,12 @@
 <?php
+
 session_start();
 require_once 'includes/db.php';
 require_once 'includes/auth.php';
 
 requireLogin();
 
+// halaman ini khusus USER — admin diarahkan ke admin_trouble.php
 if (isAdmin()) {
     header('Location: admin_trouble.php');
     exit;
@@ -14,14 +16,6 @@ $pageTitle  = 'Pemecahan Masalah';
 $activePage = 'trouble';
 $db         = getDB();
 
-<<<<<<< HEAD
-$knowledgeBase = [
-    'bau busuk|bau bangkai|baunya aneh|baunya menyengat|stnk|basi|anyir|bau tidak enak' => [
-        'answer' => '🔴 **Waduh, bau busuk?** Tenang, saya bantu! Bau busuk biasanya terjadi karena:
-1. Kelebihan air (terlalu encer)
-2. Wadah tidak steril
-3. Kontaminasi bakteri pembusuk
-=======
 // ============================================================
 // FUNGSI CHATBOT PINTAR (Powered by Gemini API)
 // ============================================================
@@ -39,7 +33,6 @@ function getGeminiResponse($userMessage) {
     3. Bau bangkai/jamur hitam = gagal/buang.
     4. Bau asam/wangi/jamur putih/gelembung = sehat/normal.
     5. Jawab dalam bahasa Indonesia kasual.";
->>>>>>> a1c81894ceb1dc2909a44af6976b1194e5d2876b
 
     $payload = [
         "contents" => [
@@ -103,6 +96,9 @@ function getGeminiResponse($userMessage) {
     return ['answer' => 'Aduh, otak AI-nya lagi nge-lag nih. Coba tanya lagi sebentar ya! 😅', 'severity' => 'amber'];
 }
 
+// ============================================================
+// PROSES POST
+// ============================================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
@@ -133,6 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// ambil semua tip (read-only untuk user)
 $filterSeverity = $_GET['severity'] ?? 'all';
 $validSeverity  = ['all', 'red', 'amber', 'green'];
 if (!in_array($filterSeverity, $validSeverity)) $filterSeverity = 'all';

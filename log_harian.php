@@ -113,10 +113,10 @@ require_once 'includes/header.php';
                     <div class="smell-picker" id="smellPicker">
                         <?php
                         $smellOpts = [
-                            'normal'   => ['emoji' => '', 'label' => 'Normal',  'class' => 'smell-normal'],
-                            'sour'     => ['emoji' => '', 'label' => 'Asam',    'class' => 'smell-sour'],
-                            'fragrant' => ['emoji' => '', 'label' => 'Wangi',   'class' => 'smell-fragrant'],
-                            'rotten'   => ['emoji' => '', 'label' => 'Busuk',   'class' => 'smell-rotten'],
+                            'normal'   => ['emoji' => '😐', 'label' => 'Normal',  'class' => 'smell-normal'],
+                            'sour'     => ['emoji' => '😮', 'label' => 'Asam',    'class' => 'smell-sour'],
+                            'fragrant' => ['emoji' => '😊', 'label' => 'Wangi',   'class' => 'smell-fragrant'],
+                            'rotten'   => ['emoji' => '🤢', 'label' => 'Busuk',   'class' => 'smell-rotten'],
                         ];
                         foreach ($smellOpts as $val => $opt): ?>
                             <label class="smell-option">

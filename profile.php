@@ -133,7 +133,7 @@ require_once 'includes/header.php';
         <?php endif; ?>
 
         <div class="card mb-3">
-            <h3 class="card-judul">Edit Profil</h3>
+            <h3 class="card-judul">✏️ Edit Profil</h3>
             <form method="POST" action="profile.php">
                 <input type="hidden" name="action" value="update_profil">
                 <div class="form-group">
@@ -149,7 +149,7 @@ require_once 'includes/header.php';
         </div>
 
         <div class="card">
-            <h3 class="card-judul">Ganti Password</h3>
+            <h3 class="card-judul">🔒 Ganti Password</h3>
             <form method="POST" action="profile.php">
                 <input type="hidden" name="action" value="ganti_password">
                 <div class="form-group">

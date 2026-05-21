@@ -1,4 +1,6 @@
 <?php
+// header.php - template header + sidebar dengan role-based navigation
+// Pastikan fungsi getFlash() dan currentUserRole() sudah didefiniskan di config/functions.php
 $flash = getFlash();
 $role  = currentUserRole(); 
 ?>
@@ -9,12 +11,15 @@ $role  = currentUserRole();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($pageTitle ?? 'EcoEnzyme') ?> — EcoEnzyme</title>
 
+    <!-- External CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Syne:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
     
+
     <script>
+        // Menerapkan tema sebelum halaman dimuat sepenuhnya
         (function() {
             const saved = localStorage.getItem('ecoenzy_theme');
             if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
@@ -25,6 +30,7 @@ $role  = currentUserRole();
 
 <div id="app">
 
+    <!-- SIDEBAR -->
     <aside class="sidebar">
             <div class="sb-logo">
             <div class="sb-logo-mark"><div class="sb-logo-leaf"></div></div>
@@ -32,6 +38,7 @@ $role  = currentUserRole();
         </div>
 
         <?php if ($role === 'admin'): ?>
+            <!-- MENU ADMIN -->
             <div class="sb-section">Admin</div>
             <a href="admin_dashboard.php" class="sb-item <?= ($activePage ?? '') === 'admin_overview' ? 'active' : '' ?>">
                 <div class="sb-dot amber"></div><span>Dasbor Admin</span>
@@ -49,7 +56,7 @@ $role  = currentUserRole();
             </a>
 
         <?php else: ?>
-        
+            <!-- MENU USER -->
             <div class="sb-section">Menu</div>
             <a href="index.php" class="sb-item <?= ($activePage ?? '') === 'overview' ? 'active' : '' ?>">
                 <div class="sb-dot"></div><span>Ikhtisar</span>
@@ -79,6 +86,7 @@ $role  = currentUserRole();
 
         <div class="sb-spacer"></div>
 
+        <!-- INFO USER -->
         <div class="sb-user">
             <div class="sb-avatar"><?= htmlspecialchars(currentUserAvatar()) ?></div>
             <div style="min-width:0">
@@ -90,6 +98,8 @@ $role  = currentUserRole();
             </div>
         </div>
     </aside>
+
+    <!-- KONTEN UTAMA -->
     <div class="main">
         <div class="topbar">
             <span class="topbar-title"><?= htmlspecialchars($pageTitle ?? 'Dasbor') ?></span>
@@ -106,12 +116,14 @@ $role  = currentUserRole();
         </div>
 
         <div class="content">
-                      <?php if (isset($flash['message']) && $flash['message']): ?>
+            <!-- Pesan Flash -->
+            <?php if (isset($flash['message']) && $flash['message']): ?>
                 <div class="flash-msg <?= htmlspecialchars($flash['type']) ?>">
                     <?= htmlspecialchars($flash['message']) ?>
                 </div>
             <?php endif; ?>
 
+            <!-- Skrip Tema -->
             <script>
                 function toggleTheme() {
                     const html  = document.documentElement;
